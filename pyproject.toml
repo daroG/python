@@ -9,6 +9,7 @@ packages = [{include = "rest_image_tracker"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 toml = "^0.10.2"
+fastapi = "^0.88.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.3"
