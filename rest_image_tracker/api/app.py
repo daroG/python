@@ -7,6 +7,7 @@ app = FastAPI(
     version='0.0.1',
 )
 
+
 @app.get('/')
 def hello_world_endpoint() -> dict[str, str]:
     """
