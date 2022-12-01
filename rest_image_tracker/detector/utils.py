@@ -1,6 +1,7 @@
 import glob
 
-from cv2 import HOGDescriptor, FONT_HERSHEY_DUPLEX, getTextSize
+from cv2 import FONT_HERSHEY_DUPLEX, getTextSize, HOGDescriptor
+
 
 HOG = HOGDescriptor()
 
@@ -13,7 +14,15 @@ FONT_SCALE = 0.5
 FONT_THICKNESS = 1
 
 
-def get_text_size(text, font_scale, font_thickness):
+def get_text_size(text: str, font_scale: float, font_thickness: int) -> int:
+    """
+    Return text font size
+
+    :param text: text to display
+    :param font_scale: scale for the text
+    :param font_thickness: thickness for the text
+    :return: value of the font size
+    """
     size, _ = getTextSize(text, FONT, font_scale, font_thickness)
     return size
 
