@@ -2,7 +2,7 @@ from pathlib import Path
 
 import cv2  # type: ignore
 import imutils  # type: ignore
-import numpy as np
+import numpy as np  # type: ignore
 from cv2 import HOGDescriptor
 from imutils.object_detection import non_max_suppression
 from imutils.video import FPS
@@ -32,37 +32,56 @@ class Detector:
         self._model_name: str = None
 
     def resize_on_too_big(self) -> None:
+        """Resize loaded image if too large"""
         if self._width > self._max_width:
             self._image = imutils.resize(self._image, width=self._image.shape[1])
         if self._height > self._max_height:
             self._image = imutils.resize(self._image, height=self._image.shape[0])
 
     def update_sizes(self) -> None:
+        """Reassign the height and width of the loaded image"""
         self._height = self._image.shape[0]
         self._width = self._image.shape[1]
 
     def load_img(self, img: np.ndarray) -> None:
+        """
+        Load and preprocess the image
+        :param img: ndarray that represent an image
+        """
         self._image = img
         self.resize_on_too_big()
         self.update_sizes()
 
     def load_img_from_file(self, path: str) -> None:
+        """
+        Load and preprocess the image from given path
+        :param path: path to an image
+        """
         img = cv2.imread(path)
         self.load_img(img)
 
     def load_img_from_bytes(self, bytes: bytes) -> None:
+        """
+        Load and preprocess the image from bytes
+        :param bytes: bytes that represent an image
+        """
         nparr = np.frombuffer(bytes, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         self.load_img(img)
-        return self
 
     def save_image(self, path: str | Path) -> None:
+        """
+        Save the image at the given path
+        :param path: path to save the image
+        """
         cv2.imwrite(str(path), self._image)
 
     def show_image(self) -> None:
+        """Show the image in a window"""
         cv2.imshow("Detection", self._image)
 
     def hog_detect(self) -> None:
+        """Perform a hog detection on the loaded image"""
         descriptor = HOGDescriptor()
         descriptor.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
@@ -85,6 +104,10 @@ class Detector:
         self._number_of_people = len(people)
 
     def draw_details(self, time: float) -> None:
+        """
+        Add the details about total found people and the time it take on the image
+        :param time: the time to print on the image
+        """
         text_height = get_text_size(
             f' Total: {self._number_of_people} Time: {time}', FONT_SCALE, FONT_THICKNESS
         )[1]
@@ -104,15 +127,23 @@ class Detector:
         )
 
     def choose_method(self) -> None:
+        """Choose the method for performing a detection"""
         self._available_methods.get(self._model_name)()
 
     def check_image(self, model_name: str) -> None:
+        """
+        Measure time how long detection takes for given image, write it on the image
+        :param model_name: model name to perform detection
+        """
         self._model_name = model_name
         time = FPS().start()
         self.choose_method()
         time.stop()
         self.draw_details(time.elapsed())
-        return self
 
     def encode_image(self) -> bytes:
+        """
+        Encode jpg image to the memory buffer
+        :return: encoded image as bytes
+        """
         return cv2.imencode('.jpg', self._image)[1]
