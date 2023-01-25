@@ -1,6 +1,7 @@
 import glob
+from typing import cast
 
-from cv2 import FONT_HERSHEY_DUPLEX, getTextSize, HOGDescriptor
+from cv2 import FONT_HERSHEY_DUPLEX, getTextSize, HOGDescriptor  # type: ignore
 
 
 HOG = HOGDescriptor()
@@ -24,7 +25,7 @@ def get_text_size(text: str, font_scale: float, font_thickness: int) -> int:
     :return: value of the font size
     """
     size, _ = getTextSize(text, FONT, font_scale, font_thickness)
-    return size
+    return cast(int, size)
 
 
 photos_list = glob.glob('images/*.jpg')
