@@ -6,6 +6,7 @@ COPY poetry.lock pyproject.toml /
 RUN poetry install --no-root
 COPY rest_image_tracker /rest_image_tracker
 COPY setup.cfg /setup.cfg
+COPY main.py /main.py
 
 ENV PATH="/.venv/bin:${PATH}"
-ENTRYPOINT [ "uvicorn", "rest_image_tracker.api:app", "--port", "8000" ]
+ENTRYPOINT [ "python", "main.py" ]
