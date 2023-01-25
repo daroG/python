@@ -135,7 +135,7 @@ class Detector:
         if method is not None:
             method()
 
-    def check_image(self, model_name: str) -> None:
+    def perform_detecting(self, model_name: str) -> None:
         """
         Measure time how long detection takes for given image, write it on the image
         :param model_name: model name to perform detection

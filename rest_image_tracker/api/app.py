@@ -33,7 +33,7 @@ def detector_endpoint(file: bytes = File()) -> StreamingResponse:
     """
     detector = Detector()
     detector.load_img_from_bytes(file)
-    detector.check_image('HOG')
+    detector.perform_detecting('HOG')
     return StreamingResponse(
         io.BytesIO(detector.encode_image()),
         media_type="image/jpg",
