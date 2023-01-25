@@ -1,7 +1,6 @@
 import cv2
-from fastapi.testclient import TestClient
 import numpy as np
-from starlette.responses import StreamingResponse
+from fastapi.testclient import TestClient
 
 
 def test_hello_world_enpoint(client: TestClient):

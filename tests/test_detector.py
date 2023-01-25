@@ -22,7 +22,7 @@ def test_init():
 
 def test_resize_on_too_big_raise():
     detector = Detector()
-    with pytest.raises(Exception) as err:
+    with pytest.raises(Exception):
         detector.resize_on_too_big()
 
 
@@ -43,10 +43,12 @@ def test_resize_on_too_big_height():
     detector.resize_on_too_big()
     assert detector._image.shape[0] == detector._max_height
 
+
 def test_update_sizes_raise():
     detector = Detector()
-    with pytest.raises(Exception) as err:
+    with pytest.raises(Exception):
         detector.update_sizes()
+
 
 @pytest.mark.parametrize('width, height', [
     (400, 500),
@@ -82,6 +84,7 @@ def test_load_image_too_big():
     assert not np.array_equal(detector._image, image)
     assert detector._width < width
     assert detector._height == detector._max_height
+
 
 def test_load_image_from_file(image_file_path: str):
     detector = Detector()
