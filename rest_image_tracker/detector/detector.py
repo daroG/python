@@ -38,8 +38,8 @@ class Detector:
             raise Exception('Image is missing')
         if self._image.shape[1] > self._max_width:
             self._image = imutils.resize(self._image, width=self._max_width)
-        if self._image.shape[0] > self._max_height:
-            self._image = imutils.resize(self._image, height=self._max_height)  # type: ignore[union-attr]
+        if self._image.shape[0] > self._max_height:  # type: ignore[union-attr]
+            self._image = imutils.resize(self._image, height=self._max_height)
 
     def update_sizes(self) -> None:
         """Reassign the height and width of the loaded image"""
