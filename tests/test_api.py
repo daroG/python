@@ -1,4 +1,4 @@
-import cv2
+import cv2  # type: ignore[import]
 import numpy as np
 from fastapi.testclient import TestClient
 
