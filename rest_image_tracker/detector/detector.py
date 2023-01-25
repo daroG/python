@@ -1,11 +1,12 @@
 from pathlib import Path
+from typing import Any, cast
 
 import cv2  # type: ignore
 import imutils  # type: ignore
 import numpy as np  # type: ignore
-from cv2 import HOGDescriptor
-from imutils.object_detection import non_max_suppression
-from imutils.video import FPS
+from cv2 import HOGDescriptor  # type: ignore
+from imutils.object_detection import non_max_suppression  # type: ignore
+from imutils.video import FPS  # type: ignore
 
 from rest_image_tracker.detector.utils import (
     BOX_COLOR,
@@ -23,27 +24,31 @@ class Detector:
     """Represent class for perform people detecting on image"""
     def __init__(self) -> None:
         self._available_methods = {'HOG': self.hog_detect}
-        self._image: np.ndarray = None
+        self._image: np.ndarray[Any, Any] | None = None
         self._height: int = 0
         self._width: int = 0
         self._max_width: int = 800
         self._max_height: int = 600
         self._number_of_people: int = 0
-        self._model_name: str = None
+        self._model_name: str | None = None
 
     def resize_on_too_big(self) -> None:
         """Resize loaded image if too large"""
+        if self._image is None:
+            raise Exception('Image is missing')
         if self._width > self._max_width:
             self._image = imutils.resize(self._image, width=self._image.shape[1])
         if self._height > self._max_height:
-            self._image = imutils.resize(self._image, height=self._image.shape[0])
+            self._image = imutils.resize(self._image, height=self._image.shape[0])  # type: ignore[union-attr]
 
     def update_sizes(self) -> None:
         """Reassign the height and width of the loaded image"""
+        if self._image is None:
+            raise Exception('Image is missing')
         self._height = self._image.shape[0]
         self._width = self._image.shape[1]
 
-    def load_img(self, img: np.ndarray) -> None:
+    def load_img(self, img: np.ndarray[Any, Any]) -> None:
         """
         Load and preprocess the image
         :param img: ndarray that represent an image
@@ -108,9 +113,9 @@ class Detector:
         Add the details about total found people and the time it take on the image
         :param time: the time to print on the image
         """
-        text_height = get_text_size(
+        _, text_height = cast(tuple[Any, int], get_text_size(
             f' Total: {self._number_of_people} Time: {time}', FONT_SCALE, FONT_THICKNESS
-        )[1]
+        ))
 
         cv2.rectangle(
             self._image,
@@ -128,7 +133,11 @@ class Detector:
 
     def choose_method(self) -> None:
         """Choose the method for performing a detection"""
-        self._available_methods.get(self._model_name)()
+        if self._model_name is None:
+            raise Exception('Model name is missing')
+        method = self._available_methods.get(self._model_name)
+        if method is not None:
+            method()
 
     def check_image(self, model_name: str) -> None:
         """
@@ -146,4 +155,4 @@ class Detector:
         Encode jpg image to the memory buffer
         :return: encoded image as bytes
         """
-        return cv2.imencode('.jpg', self._image)[1]
+        return cast(bytes, cv2.imencode('.jpg', self._image)[1])
