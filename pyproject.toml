@@ -111,7 +111,7 @@ strict_equality = true
 disallow_untyped_globals = true
 warn_no_return = true
 warn_unreachable = true
-exclude = ['.venv/']
+exclude = '^.venv(\|/).+'
 
 [[tool.mypy.overrides]]
 module = [
