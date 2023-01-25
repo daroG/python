@@ -81,10 +81,6 @@ class Detector:
         """
         cv2.imwrite(str(path), self._image)
 
-    def show_image(self) -> None:
-        """Show the image in a window"""
-        cv2.imshow("Detection", self._image)
-
     def hog_detect(self) -> None:
         """Perform a hog detection on the loaded image"""
         descriptor = HOGDescriptor()
