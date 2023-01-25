@@ -31,7 +31,9 @@ def detector_endpoint(file: bytes = File()) -> StreamingResponse:
     :param file: image to process
     :return: processed image
     """
-    detector = Detector().load_img_from_bytes(file).check_image('HOG')
+    detector = Detector()
+    detector.load_img_from_bytes(file)
+    detector.check_image('HOG')
     return StreamingResponse(
         io.BytesIO(detector.encode_image()),
         media_type="image/jpg",
